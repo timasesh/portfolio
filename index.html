@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Портфолио — Тимур Тлеужанов</title>
+    <meta name="description" content="Стильное портфолио: о себе, проекты, контакты." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" />
+</head>
+<body>
+    <header class="site-header" id="top">
+        <nav class="nav" aria-label="Главная навигация">
+            <button class="nav__toggle" aria-expanded="false" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav__list">
+                <li><a href="#about">Обо мне</a></li>
+                <li><a href="#projects">Проекты</a></li>
+                <li><a href="#skills">Навыки</a></li>
+                <li><a href="#contact">Контакты</a></li>
+                <li class="theme-control"><button class="theme-switch" role="switch" aria-checked="false" title="Переключить тему" aria-label="Переключить тему"></button><span class="theme-text" aria-hidden="true">Тёмная</span></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero section" aria-label="Вступительный блок">
+            <div class="container grid-2">
+                <div class="hero__content">
+                    <h1 class="h1">Привет! Я <span class="accent">Тимур Тлеужанов</span></h1>
+                    <p class="lead">Начинающий IT‑специалист из Алматы. Делаю веб‑ и мобильные приложения на Django, MySQL и React Native/Expo.</p>
+                    <div class="hero__cta">
+                        <a class="btn btn--primary" href="#projects">Смотреть проекты</a>
+                        <a class="btn btn--ghost" href="#contact">Связаться</a>
+                    </div>
+                    <ul class="hero__meta">
+                        <li>Город: Алматы, Казахстан</li>
+                        <li>Статус: 19 лет, начинающий</li>
+                        <li>Формат: сотрудничество/стажировка</li>
+                    </ul>
+                </div>
+                <div class="hero__visual">
+                    <div class="avatar">
+                        <img src="images/photo.jpg" alt="Тимур Тлеужанов" loading="lazy"/>
+                    </div>
+                    <div class="hero__badges">
+                        <span class="chip">Django</span>
+                        <span class="chip">MySQL</span>
+                        <span class="chip">React Native</span>
+                        <span class="chip">Expo</span>
+                    </div>
+                </div>  
+            </div>
+        </section>
+
+        <section id="about" class="section section--alt">
+            <div class="container">
+                <h2 class="h2">Обо мне</h2>
+                <p>Меня зовут Тимур Тлеужанов — начинающий IT‑специалист из Алматы. Развиваюсь в веб‑ и мобильной разработке: бэкенд на Django + MySQL, мобильные приложения на React Native/Expo. Опыт командной работы (GitHub), парсинга CSV/Word и автоматической загрузки PDF/видео в Django. Интересуюсь геймдевом (Unreal Engine 5). Стажировка в АРФР, геймификация обучения и командных задач.</p>
+                <div class="stats">
+                    <div class="stat"><span class="stat__num" data-count="3">0</span><span class="stat__label">основных проекта</span></div>
+                    <div class="stat"><span class="stat__num" data-count="3">0</span><span class="stat__label">года в сфере</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="h2">Проекты</h2>
+                <div class="projects grid-3">
+                    <article class="card reveal">
+                        <img src="images/study-task-1.png" alt="Study Task — онлайн‑школа IT‑направлений" loading="lazy"/>
+                        <div class="card__body">
+                            <h3 class="h3">Study Task — онлайн‑школа</h3>
+                            <p>Платформа с курсами, модулями, уроками, квизами и прогрессом. Импорт из CSV/Word, видео и PDF, роли админ/студент. Стек: Django, MySQL, Bootstrap.</p>
+                            <div class="card__actions">
+                                <a class="btn btn--sm" href="#" target="_blank" rel="noopener">Demo</a>
+                                <a class="btn btn--sm btn--ghost" href="#" target="_blank" rel="noopener">GitHub</a>
+                                <button class="btn btn--sm btn--ghost project-toggle" data-project="study">Подробнее</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card reveal">
+                        <img src="images/adaptation-1.png" alt="Adaptation — сайт для AlmaU" loading="lazy"/>
+                        <div class="card__body">
+                            <h3 class="h3">Adaptation — для AlmaU</h3>
+                            <p>Сайт адаптации студентов AlmaU: разделы, материалы, удобная навигация. Роль: fullstack. Технологии: Django/HTML/CSS.</p>
+                            <div class="card__actions">
+                                <a class="btn btn--sm btn--ghost" href="#" target="_blank" rel="noopener">GitHub</a>
+                                <button class="btn btn--sm btn--ghost project-toggle" data-project="adaptation">Подробнее</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card reveal">
+                        <img src="images/info-kaz-1.png" alt="Info‑Kaz — новостной сайт" loading="lazy"/>
+                        <div class="card__body">
+                            <h3 class="h3">Info‑Kaz — новостной сайт</h3>
+                            <p>Новостной портал: публикация статей, категории, простая админка. Технологии: Django, MySQL, Bootstrap.</p>
+                            <div class="card__actions">
+                                <a class="btn btn--sm btn--ghost" href="#" target="_blank" rel="noopener">GitHub</a>
+                                <button class="btn btn--sm btn--ghost project-toggle" data-project="infokaz">Подробнее</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card reveal">
+                        <img src="images/game-1.jpg" alt="Детективная игра — концепт и прототип на UE5" loading="lazy"/>
+                        <div class="card__body">
+                            <h3 class="h3">Детективная игра — UE5</h3>
+                            <p>Mystery/Thriller концепт и прототип: сбор улик, диалоги, нелинейность. UE5 Blueprints.</p>
+                            <div class="card__actions">
+                                <button class="btn btn--sm btn--ghost project-toggle" data-project="detective">Подробнее</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="project-drawer" aria-hidden="true">
+                <div class="project-drawer__inner container">
+                    <div class="project-drawer__header">
+                        <h3 class="project-drawer__title h3"></h3>
+                        <button class="project-drawer__close" aria-label="Закрыть">✕</button>
+                    </div>
+                    <div class="project-drawer__meta"></div>
+                    <div class="project-drawer__content">
+                        <div class="project-drawer__gallery"></div>
+                        <div class="project-drawer__text"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section section--alt">
+            <div class="container">
+                <h2 class="h2">Навыки</h2>
+                <ul class="skills">
+                    <li class="skill">Django (Python)</li>
+                    <li class="skill">MySQL</li>
+                    <li class="skill">HTML/CSS, Bootstrap</li>
+                    <li class="skill">React Native / Expo</li>
+                    <li class="skill">Git / GitHub</li>
+                    <li class="skill">Unreal Engine 5</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container grid-2">
+                <div>
+                    <h2 class="h2">Контакты</h2>
+                    <p>Открыт к сотрудничеству и новым проектам. Напишите мне — отвечу быстро.</p>
+                    <ul class="contact">
+                        <li><a href="mailto:tleuzhanovtimur1@gmail.com">tleuzhanovtimur1@gmail.com</a></li>
+                        <li><a href="https://t.me/timurtleuzhanov" target="_blank" rel="noopener">Telegram</a></li>
+                        <li><a href="https://github.com/timasesh" target="_blank" rel="noopener">GitHub</a></li>
+                    </ul>
+                </div>
+                <form class="form" onsubmit="return false" aria-label="Форма обратной связи">
+                    <label>
+                        <span>Имя</span>
+                        <input type="text" placeholder="Иван" required>
+                    </label>
+                    <label>
+                        <span>Email</span>
+                        <input type="email" placeholder="you@mail.com" required>
+                    </label>
+                    <label>
+                        <span>Сообщение</span>
+                        <textarea rows="4" placeholder="Ваше сообщение" required></textarea>
+                    </label>
+                    <button class="btn btn--primary" type="submit">Отправить</button>
+                    <p class="form__status" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>© <span id="year"></span> Тимур Тлеужанов. Сделано с любовью к коду.</p>
+            </div>
+        </footer>
+    </main>
+
+    <button class="to-top" aria-label="Наверх">↑</button>
+
+    <script src="scripts.js" defer></script>
+</body>
+</html>
+
