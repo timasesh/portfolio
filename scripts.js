@@ -286,19 +286,227 @@ stats.forEach((el) => statsObserver.observe(el));
 // Footer year
 document.getElementById('year').textContent = String(new Date().getFullYear());
 
-// Form demo
-const form = document.querySelector('.form');
+// Форма: сохранение заявок в localStorage
+const form = document.getElementById('contact-form');
 const statusEl = document.querySelector('.form__status');
+
 if (form) {
-  form.addEventListener('submit', () => {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
     if (!statusEl) return;
-    statusEl.textContent = 'Отправка...';
+
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+
+    // Создаем объект заявки
+    const submission = {
+      id: Date.now(),
+      name: name.trim(),
+      email: email.trim(),
+      message: message.trim(),
+      date: new Date().toISOString(),
+      timestamp: Date.now()
+    };
+
+    // Получаем существующие заявки из localStorage
+    const existingSubmissions = JSON.parse(localStorage.getItem('portfolio_submissions') || '[]');
+    
+    // Добавляем новую заявку
+    existingSubmissions.push(submission);
+    
+    // Сохраняем обратно в localStorage
+    localStorage.setItem('portfolio_submissions', JSON.stringify(existingSubmissions));
+
+    statusEl.textContent = 'Спасибо! Ваше сообщение сохранено.';
+    statusEl.style.color = 'var(--accent)';
+    form.reset();
+
+    // Очищаем сообщение через 5 секунд
     setTimeout(() => {
-      statusEl.textContent = 'Спасибо! Сообщение отправлено (демо).';
-      form.reset();
-    }, 700);
+      statusEl.textContent = '';
+    }, 5000);
   });
 }
+
+// Секретная админка: 5 кликов по аватару
+let clickCount = 0;
+let clickTimeout = null;
+const ADMIN_PASSWORD = 'abc123';
+const avatar = document.querySelector('#admin-trigger');
+
+if (avatar) {
+  avatar.style.cursor = 'pointer';
+  avatar.addEventListener('click', () => {
+    clickCount++;
+    
+    // Сбрасываем счетчик через 3 секунды бездействия
+    if (clickTimeout) clearTimeout(clickTimeout);
+    clickTimeout = setTimeout(() => {
+      clickCount = 0;
+    }, 3000);
+
+    // Если 5 кликов подряд - открываем модальное окно с паролем
+    if (clickCount >= 5) {
+      clickCount = 0;
+      openPasswordModal();
+    }
+  });
+}
+
+// Модальные окна
+const passwordModal = document.getElementById('password-modal');
+const submissionsModal = document.getElementById('submissions-modal');
+const passwordForm = document.getElementById('password-form');
+const passwordInput = document.getElementById('password-input');
+const passwordStatus = document.getElementById('password-status');
+const submissionsList = document.getElementById('submissions-list');
+
+function openPasswordModal() {
+  if (passwordModal) {
+    passwordModal.setAttribute('aria-hidden', 'false');
+    passwordInput?.focus();
+  }
+}
+
+function closePasswordModal() {
+  if (passwordModal) {
+    passwordModal.setAttribute('aria-hidden', 'true');
+    passwordForm?.reset();
+    if (passwordStatus) passwordStatus.textContent = '';
+  }
+}
+
+function openSubmissionsModal() {
+  if (submissionsModal) {
+    submissionsModal.setAttribute('aria-hidden', 'false');
+    loadSubmissions();
+  }
+}
+
+function closeSubmissionsModal() {
+  if (submissionsModal) {
+    submissionsModal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+// Обработка формы пароля
+if (passwordForm) {
+  passwordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const password = passwordInput.value.trim();
+    
+    if (password === ADMIN_PASSWORD) {
+      closePasswordModal();
+      openSubmissionsModal();
+    } else {
+      if (passwordStatus) {
+        passwordStatus.textContent = 'Неверный пароль. Попробуйте ещё раз.';
+        passwordStatus.style.color = 'var(--primary)';
+      }
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+  });
+}
+
+// Загрузка заявок из localStorage
+function loadSubmissions() {
+  if (!submissionsList) return;
+  
+  const submissions = JSON.parse(localStorage.getItem('portfolio_submissions') || '[]');
+  
+  if (submissions.length === 0) {
+    submissionsList.innerHTML = '<p class="form__status">Заявок пока нет.</p>';
+    return;
+  }
+
+  // Сортируем по дате (новые сверху)
+  submissions.sort((a, b) => b.timestamp - a.timestamp);
+
+  submissionsList.innerHTML = `
+    <div class="submissions-header">
+      <p>Всего заявок: <strong>${submissions.length}</strong></p>
+      <button class="btn btn--sm btn--ghost" id="clear-submissions">Очистить все</button>
+    </div>
+    <div class="submissions-grid">
+      ${submissions.map(sub => `
+        <article class="submission-card">
+          <header class="submission-card__header">
+            <div>
+              <h4 class="h4">${escapeHtml(sub.name)}</h4>
+              <p class="submission-card__email">${escapeHtml(sub.email)}</p>
+            </div>
+            <time class="submission-card__date">${formatDate(sub.date)}</time>
+          </header>
+          <p class="submission-card__message">${escapeHtml(sub.message)}</p>
+          <button class="btn btn--sm btn--ghost submission-delete" data-id="${sub.id}">Удалить</button>
+        </article>
+      `).join('')}
+    </div>
+  `;
+
+  // Обработчики удаления
+  document.querySelectorAll('.submission-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = Number(btn.getAttribute('data-id'));
+      deleteSubmission(id);
+    });
+  });
+
+  // Обработчик очистки всех заявок
+  const clearBtn = document.getElementById('clear-submissions');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Вы уверены, что хотите удалить все заявки?')) {
+        localStorage.removeItem('portfolio_submissions');
+        loadSubmissions();
+      }
+    });
+  }
+}
+
+function deleteSubmission(id) {
+  const submissions = JSON.parse(localStorage.getItem('portfolio_submissions') || '[]');
+  const filtered = submissions.filter(sub => sub.id !== id);
+  localStorage.setItem('portfolio_submissions', JSON.stringify(filtered));
+  loadSubmissions();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+}
+
+// Закрытие модальных окон
+document.querySelectorAll('.modal__close, .modal__overlay').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (e.target === el || e.target.closest('.modal__close')) {
+      closePasswordModal();
+      closeSubmissionsModal();
+    }
+  });
+});
+
+// Закрытие по Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closePasswordModal();
+    closeSubmissionsModal();
+  }
+});
 
 // To top button
 const toTop = document.querySelector('.to-top');
